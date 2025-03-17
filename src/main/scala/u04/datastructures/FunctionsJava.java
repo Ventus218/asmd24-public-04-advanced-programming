@@ -20,15 +20,15 @@ public class FunctionsJava {
 
     record Point2D(double x, double y){}
 
-    static Point2D swap(Point2D p){
+    static Point2D multiply(Point2D p, double d){
         return switch(p){
-            case Point2D(double x, double y) -> new Point2D(y, x);
+            case Point2D(double x, double y) -> new Point2D(x * d, y * d);
         };
     }
 
     public static void main(String[] args){
         System.out.println(factorial(5));
         System.out.println(applyManyTimes(0, 10, x -> x + 2));
-        System.out.println(swap(new Point2D(10, 20)));
+        System.out.println(multiply(new Point2D(10, 20), 1.5));
     }
 }

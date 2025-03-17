@@ -29,7 +29,8 @@ object Optionals:
   val s2: Optional[Int] = None()
 
   println(s1) // Some(1)
-  // println(isEmpty(s1)) // false
+  println:    // alternative style for one-arg calls
+    s1.isEmpty()
   println(s1.orElse(0)) // 1
   println(s2.orElse(0)) // 0
   println(s1.map(i => "val: " + 1)) // Some("val: 1")

@@ -16,11 +16,15 @@ object Functions extends App:
     case _ => applyManyTimes(f(initial), n - 1)(f)
 
   println(applyManyTimes(0, 10)(i => i + 2)) // 20
+  println(applyManyTimes(0, 10)(_ + 2)) // equivalent formulation
 
   // a record data type
   case class Point2D(x: Double, y: Double)
 
-  def swap(p: Point2D): Point2D = p match
-    case Point2D(x, y) => Point2D(y, x)
+  // using extension
+  extension (p: Point2D) def multiply(d: Double): Point2D = p match
+    case Point2D(x, y) => Point2D(d * x, d * y)
 
-  println(swap(Point2D(10, 20))) // Point2D(20, 10)
+  println(multiply(Point2D(10, 20))(1.5))
+  println(Point2D(10, 20).multiply(1.5))
+  println(Point2D(10, 20) multiply 1.5)

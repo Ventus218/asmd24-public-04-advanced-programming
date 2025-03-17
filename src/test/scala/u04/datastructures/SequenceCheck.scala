@@ -17,7 +17,7 @@ object SequenceCheck extends Properties("Sequence"):
       of(i, s).filter(e => e != s) == Nil()
     &&
     forAll(smallInt(), arbitrary[String]): (i, s) =>
-      Cons(s, of(i, s)) == of(i+1, s)
+      Cons(s, of(i, s)) == of(i + 1, s)
     &&
     forAll(arbitrary[String]): s =>
       of(0, s) == Nil()
