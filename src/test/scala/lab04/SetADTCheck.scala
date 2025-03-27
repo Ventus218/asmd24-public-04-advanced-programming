@@ -7,26 +7,27 @@ import scala.lab04.SetADTs.{BasicSetADT, SetADT}
 
 abstract class SetADTCheck(name: String) extends Properties(name):
   val setADT: SetADT
+  import setADT.*
 
   // generating a small Int
   def smallInt(): Gen[Int] = Gen.choose(0, 10)
   // generating a Set of Int with approximate size (modulo clashes)
-  def setGen[A: Arbitrary](size: Int): Gen[setADT.Set[A]] =
+  def setGen[A: Arbitrary](size: Int): Gen[Set[A]] =
     if size == 0
-      then Gen.const(setADT.empty())
+      then Gen.const(empty())
     else for
       a <- Arbitrary.arbitrary[A]
       s <- setGen(size - 1)
     yield s.add(a)
   // a given instance to generate sets with small size
-  given arb: Arbitrary[setADT.Set[Int]] = Arbitrary:
+  given arb: Arbitrary[Set[Int]] = Arbitrary:
     for
       i <- smallInt()
       s <- setGen[Int](i)
     yield s
 
   property("commutativity of union") =
-    forAll: (s1: setADT.Set[Int], s2: setADT.Set[Int]) =>
+    forAll: (s1: Set[Int], s2: Set[Int]) =>
       (s1 || s2) === (s2 || s1)
 
   /**
@@ -37,14 +38,14 @@ abstract class SetADTCheck(name: String) extends Properties(name):
     */
 
   property("axioms for contains") =
-   forAll: (s: setADT.Set[Int], x: Int) =>
+   forAll: (s: Set[Int], x: Int) =>
      s.add(x).contains(x)
    &&
-     forAll: (s: setADT.Set[Int], x: Int, y:Int) =>
-      x == y || s.add(x).contains(y) == s.contains(y)
+     forAll: (s: Set[Int], x: Int, y:Int) =>
+        x == y || s.add(x).contains(y) == s.contains(y)
    &&
      forAll: (x: Int) =>
-      !setADT.empty().contains(x)
+        !empty().contains(x)
 
 
 object BasicSetADTCheck extends SetADTCheck("SequenceBased Set"):
