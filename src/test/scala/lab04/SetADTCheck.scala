@@ -5,10 +5,18 @@ import org.scalacheck.{Arbitrary, Properties}
 
 import scala.lab04.Sets.{BasicSetADT, SetADT}
 
-object SetADTCheck extends Properties("Sets"):
+abstract class SetADTCheck(name: String) extends Properties(name):
+  val ADT: SetADT
 
-  given Arbitrary[SetADT] = Arbitrary(BasicSetADT)
+  given Arbitrary[ADT.Set[Int]] = Arbitrary:
+    for
+      n <- Arbitrary.arbitrary[Int]
+    yield ADT.of(n)
+
 
   property("union - commutative") = forAll:
-    (adt: SetADT, a: Int, b: Int) =>
-      (adt.of(a) || adt.of(b)) === (adt.of(b) || adt.of(a))
+    (a: ADT.Set[Int], b: ADT.Set[Int]) =>
+      (a || b) === (b || a)
+
+object BasicSetADTCheck extends SetADTCheck("SequenceBased Set"):
+  val ADT: SetADT = BasicSetADT
