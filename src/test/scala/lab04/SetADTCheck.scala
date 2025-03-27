@@ -32,20 +32,30 @@ abstract class SetADTCheck(name: String) extends Properties(name):
 
   /**
     * axioms defining contains based on empty/add:
-    * contains(add(X, S), X) = true
-    * contains(add(X, S), Y) = contains(S, Y) if X!=Y
-    * contains(empty(), _) = false
-    */
+    * contains(empty, x) = false
+    * contains(add(x,s), y) = (x == y) || contains(s, y)
+  */
 
   property("axioms for contains") =
    forAll: (s: Set[Int], x: Int) =>
      s.add(x).contains(x)
    &&
      forAll: (s: Set[Int], x: Int, y:Int) =>
-        x == y || s.add(x).contains(y) == s.contains(y)
+        s.add(x).contains(y) == (x == y) || s.contains(y)
    &&
      forAll: (x: Int) =>
         !empty().contains(x)
+
+/**
+ * axioms defining union and remove:
+ * union(empty, s) = s
+ * union(add(x, s2), s) = add(x, union(s2, s)
+ * remove(x, empty) = empty
+ * remove(x, add(x, s)) = remove(x, s)
+ * remove(x, add(y, s)) = add(y, remove(x, s)) if x!=y
+ *
+ * and so on: write axioms and correspondingly implement checks
+ */
 
 
 object BasicSetADTCheck extends SetADTCheck("SequenceBased Set"):
