@@ -51,6 +51,17 @@ object SequenceCheck extends Properties("Sequence"):
         case (Nil(), f) => filter[Int](seq)(f) == Nil()
         case (Cons(h, t), f) => filter(seq)(f) == (if f(h) then Cons(h, filter(t)(f)) else filter(t)(f))
 
+  // Operation:
+  //  flatMap: Sequence[A] x (A => Sequence[B]) => Sequence[B]
+  // Axioms:
+  //  flatMap(nil) = nil
+  //  flatMap(cons(h, t), f) = f(h) concat flatMap(t, f)
+  property("flatMapAxioms") =
+    forAll: (seq: Sequence[Int], f: Int => Sequence[Int]) =>
+      (seq, f) match
+        case (Nil(), f) => flatMap(seq)(f) == Nil()
+        case (Cons(h, t), f) => flatMap(seq)(f) == concat(f(h), flatMap(t)(f))
+        
   // how to check a generator works as expected
   @main def showSequences() =
     Range(0,20).foreach(i => println(summon[Arbitrary[Sequence[Int]]].arbitrary.sample))
