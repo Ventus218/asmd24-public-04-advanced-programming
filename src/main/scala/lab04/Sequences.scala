@@ -27,6 +27,7 @@ object Sequences:
         case Cons(_, t)            => t.filter(pred)
         case Nil()                 => Nil()
 
+      def flatMap[B](f: A => Sequence[B]) = ???
 @main def trySequences() =
   import Sequences.*
   import Sequence.*
