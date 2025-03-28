@@ -40,6 +40,16 @@ object SequenceCheck extends Properties("Sequence"):
         case s @ Nil() => sum(s) == 0
         case s @ Cons(h, t) => sum(s) == h + sum(t)
       
+  // Operation:
+  //  filter: Sequence[A] x (A => Boolean) => Sequence[A]
+  // Axioms:
+  //  filter(nil) = nil
+  //  filter(cons(h, t), f) = if f(h) then cons(h, filter(t, f)) else filter(t, f)
+  property("filterAxioms") =
+    forAll: (seq: Sequence[Int], f: Int => Boolean) =>
+      (seq, f) match
+        case (s @ Nil(), f) => filter[Int](s)(f) == Nil()
+        case (s @ Cons(h, t), f) => filter(s)(f) == (if f(h) then Cons(h, filter(t)(f)) else filter(t)(f))
 
   // how to check a generator works as expected
   @main def showSequences() =
