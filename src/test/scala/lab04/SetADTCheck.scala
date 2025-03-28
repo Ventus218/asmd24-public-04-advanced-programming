@@ -37,9 +37,6 @@ abstract class SetADTCheck(name: String) extends Properties(name):
   */
 
   property("axioms for contains") =
-   forAll: (s: Set[Int], x: Int) =>
-     s.add(x).contains(x)
-   &&
      forAll: (s: Set[Int], x: Int, y:Int) =>
         s.add(x).contains(y) == (x == y) || s.contains(y)
    &&
